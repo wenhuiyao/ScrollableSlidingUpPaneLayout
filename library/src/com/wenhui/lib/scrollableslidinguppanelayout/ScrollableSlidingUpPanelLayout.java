@@ -682,9 +682,7 @@ public class ScrollableSlidingUpPanelLayout extends ViewGroup {
 				v.playSoundEffect(SoundEffectConstants.CLICK);
 				if (!isExpanded()) {
 					expandPane(mSlideableView, 0);
-				} else {
-					collapsePane();
-				}
+				} 
 				break;
 			}
 			break;
