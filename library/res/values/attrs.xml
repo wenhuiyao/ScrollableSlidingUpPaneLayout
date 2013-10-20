@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    
+    <declare-styleable name="ScrollableSlidingUpPaneLayout">
+        <attr name="expand_initially" format="boolean"/>
+        <attr name="middle_clamp_bound" format="dimension"/>
+        <attr name="panel_height" format="dimension"/>
+        <attr name="shadow_height" format="dimension"/>
+        <attr name="is_sliding_enable" format="boolean"/>
+        <attr name="can_slide" format="boolean"/>
+        <attr name="fade_color" format="color"/>
+        <attr name="draw_view_under_panel" format="boolean"/>
+    </declare-styleable>
+    
+    <declare-styleable name="ScrollableSlidingUpPaneLayout_LayoutParams">
+        <attr name="layout_slideable" format="boolean"/>
+    </declare-styleable>
+    
+</resources>
