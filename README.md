@@ -7,7 +7,7 @@ An enhanced version of SlidingUpPaneLayout created by [Umano](https://github.com
 #### Main Features
 
 * Allow sliding pane clamping at certain position
-* Allow scrollable view take over touch event when sliding up layout reach top edge.
+* Allow scrollable view taking over touch event when sliding up layout reach top edge. Scrollable views are ListView, GridView, and ScrollView.
 
 
 #### Demo
