@@ -217,7 +217,7 @@ public class ScrollableSlidingUpPanelLayout extends ViewGroup {
 		final TypedArray a = context.obtainStyledAttributes( attrs,R.styleable.ScrollableSlidingUpPaneLayout );
 
 		try{
-			mPreservedExpandedState = a.getBoolean(R.styleable.ScrollableSlidingUpPaneLayout_is_sliding_enable, true);
+			mPreservedExpandedState = a.getBoolean(R.styleable.ScrollableSlidingUpPaneLayout_expand_initially, false);
 			mPanelHeight = a.getDimensionPixelSize(R.styleable.ScrollableSlidingUpPaneLayout_panel_height, DEFAULT_PANEL_HEIGHT);
 			mShadowHeight = a.getDimensionPixelSize(R.styleable.ScrollableSlidingUpPaneLayout_shadow_height, DEFAULT_SHADOW_HEIGHT);
 			mIsSlidingEnabled = a.getBoolean(R.styleable.ScrollableSlidingUpPaneLayout_is_sliding_enable, true);
@@ -276,7 +276,7 @@ public class ScrollableSlidingUpPanelLayout extends ViewGroup {
 		mPanelSlideListener = listener;
 	}
 	
-	public void setPanelExpandedListener(PanelExpandedListener listener){
+	void setPanelExpandedListener(PanelExpandedListener listener){
 		mPanelExpandedListener = listener;
 	}
 
@@ -308,7 +308,7 @@ public class ScrollableSlidingUpPanelLayout extends ViewGroup {
 	 * @param view
 	 */
 	public void enableOverscroll(ViewGroup view){
-		ScrollableSlidingUpPanelAttacher attacher = ScrollableSlidingUpPanelAttacher.getInstance(getContext());
+		ScrollableSlidingUpPaneLayoutHelper attacher = ScrollableSlidingUpPaneLayoutHelper.getInstance(getContext());
 		attacher.addScrollableView(this, view);
 	}
 
@@ -454,12 +454,13 @@ public class ScrollableSlidingUpPanelLayout extends ViewGroup {
 				continue;
 			}
 
-			if (i == 1) {
-				lp.slideable = true;
+			if (lp.slideable) {
 				lp.dimWhenOffset = true;
 				mSlideableView = child;
 				mCanSlide = true;
-			} else {
+			} else if ( !mShouldDrawViewUnderneathPanel ){
+				// If we are not gonna to draw view underneath panel view,
+				// make panel height as padding bottom.
 				height -= panelHeight;
 			}
 

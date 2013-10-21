@@ -3,6 +3,6 @@
 
     <string name="app_name">ScrollableSlidingUpPaneLayoutDemo</string>
     <string name="action_settings">Settings</string>
-    <string name="hello_world">Hello world!</string>
+    <string name="gallery_title">Gallery photos</string>
 
 </resources>

@@ -20,12 +20,12 @@ import android.view.View;
 import android.widget.AbsListView;
 import android.widget.ScrollView;
 
-import com.wenhui.lib.scrollableslidinguppanelayout.ScrollableSlidingUpPanelAttacher;
+import com.wenhui.lib.scrollableslidinguppanelayout.ScrollableSlidingUpPaneLayoutHelper;
 
 /**
  * FIXME
  */
-public class ScrollYDelegate extends ScrollableSlidingUpPanelAttacher.ViewDelegate {
+public class ScrollYDelegate extends ScrollableSlidingUpPaneLayoutHelper.ViewDelegate {
 
 	
     @Override

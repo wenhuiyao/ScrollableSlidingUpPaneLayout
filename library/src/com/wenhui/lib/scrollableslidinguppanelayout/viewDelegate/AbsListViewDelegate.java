@@ -19,13 +19,13 @@ package com.wenhui.lib.scrollableslidinguppanelayout.viewDelegate;
 import android.view.View;
 import android.widget.AbsListView;
 
-import com.wenhui.lib.scrollableslidinguppanelayout.ScrollableSlidingUpPanelAttacher;
+import com.wenhui.lib.scrollableslidinguppanelayout.ScrollableSlidingUpPaneLayoutHelper;
 
 /**
  * FIXME
  */
 public class AbsListViewDelegate
-        extends ScrollableSlidingUpPanelAttacher.ViewDelegate {
+        extends ScrollableSlidingUpPaneLayoutHelper.ViewDelegate {
 
     public static final Class SUPPORTED_VIEW_CLASS = AbsListView.class;
 

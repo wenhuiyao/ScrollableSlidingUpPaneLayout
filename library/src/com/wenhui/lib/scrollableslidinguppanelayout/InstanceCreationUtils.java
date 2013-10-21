@@ -41,7 +41,7 @@ class InstanceCreationUtils {
         BUILT_IN_DELEGATES.put(AbsListViewDelegate.SUPPORTED_VIEW_CLASS, AbsListViewDelegate.class);
     }
 
-    static ScrollableSlidingUpPanelAttacher.ViewDelegate getBuiltInViewDelegate(final View view) {
+    static ScrollableSlidingUpPaneLayoutHelper.ViewDelegate getBuiltInViewDelegate(final View view) {
         final Set<Map.Entry<Class, Class>> entries = BUILT_IN_DELEGATES.entrySet();
         for (final Map.Entry<Class, Class> entry : entries) {
             if (entry.getKey().isInstance(view)) {
