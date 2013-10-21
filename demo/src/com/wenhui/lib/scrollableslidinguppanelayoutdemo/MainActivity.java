@@ -1,9 +1,12 @@
 package com.wenhui.lib.scrollableslidinguppanelayoutdemo;
 
+import android.annotation.SuppressLint;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.view.Menu;
+import android.view.View;
 
 public class MainActivity extends FragmentActivity {
 
@@ -11,9 +14,13 @@ public class MainActivity extends FragmentActivity {
 	
 	private OnBackPressedListener mBackPressedListener;
 	
+	@SuppressLint("NewApi")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		if( Build.VERSION.SDK_INT > 10 ){
+			getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE);
+		}
 		ImageFragment fragment;
 		if (getSupportFragmentManager().findFragmentByTag(TAG) == null) {
 			final FragmentTransaction ft = getSupportFragmentManager().beginTransaction();

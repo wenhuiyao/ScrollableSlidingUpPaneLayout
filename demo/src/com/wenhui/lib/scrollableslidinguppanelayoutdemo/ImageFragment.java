@@ -124,10 +124,11 @@ public class ImageFragment extends Fragment implements LoaderCallbacks<Cursor>,
 				MediaStore.Images.Media.DATA, };
 		String selection = "";
 		String[] selectionArgs = null;
+		String order = MediaStore.Images.Media._ID + " DESC";
 		return new CursorLoader(getActivity(), // Parent activity context
 				mContentUri, // Table to query
 				projection, // Projection to return
-				selection, selectionArgs, null);
+				selection, selectionArgs, order);
 	}
 
 	@Override
