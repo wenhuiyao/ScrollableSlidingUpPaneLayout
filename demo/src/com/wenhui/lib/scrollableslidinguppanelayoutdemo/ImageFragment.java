@@ -22,13 +22,13 @@ import android.widget.GridView;
 import android.widget.ImageView;
 
 import com.squareup.picasso.Picasso;
-import com.wenhui.lib.scrollableslidinguppanelayout.ScrollableSlidingUpPanelLayout;
+import com.wenhui.lib.scrollableslidinguppanelayout.ScrollableSlidingUpPaneLayout;
 import com.wenhui.lib.scrollableslidinguppanelayoutdemo.MainActivity.OnBackPressedListener;
 
 public class ImageFragment extends Fragment implements LoaderCallbacks<Cursor>,
 		OnItemClickListener, OnBackPressedListener {
 
-	private ScrollableSlidingUpPanelLayout mLayout;
+	private ScrollableSlidingUpPaneLayout mLayout;
 	private ImageAdapter mAdapter;
 	private int mImageThumbnailSize;
 	private int mImageThumbSpacing;
@@ -51,7 +51,7 @@ public class ImageFragment extends Fragment implements LoaderCallbacks<Cursor>,
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 
-		mLayout = (ScrollableSlidingUpPanelLayout) inflater
+		mLayout = (ScrollableSlidingUpPaneLayout) inflater
 				.inflate(R.layout.activity_main, container, false);
 
 		final GridView gridView = (GridView) mLayout.findViewById(R.id.gridView);

@@ -20,7 +20,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.accessibility.AccessibilityEvent;
 
-public class ScrollableSlidingUpPanelLayout extends ViewGroup {
+public class ScrollableSlidingUpPaneLayout extends ViewGroup {
 	private static final String TAG = "SlidingPaneLayout";
 
 	/**
@@ -202,15 +202,15 @@ public class ScrollableSlidingUpPanelLayout extends ViewGroup {
 		public void onPanelCollapse();
 	}
 
-	public ScrollableSlidingUpPanelLayout(Context context) {
+	public ScrollableSlidingUpPaneLayout(Context context) {
 		this(context, null);
 	}
 
-	public ScrollableSlidingUpPanelLayout(Context context, AttributeSet attrs) {
+	public ScrollableSlidingUpPaneLayout(Context context, AttributeSet attrs) {
 		this(context, attrs, 0);
 	}
 
-	public ScrollableSlidingUpPanelLayout(Context context, AttributeSet attrs,
+	public ScrollableSlidingUpPaneLayout(Context context, AttributeSet attrs,
 			int defStyle) {
 		super(context, attrs, defStyle);
 

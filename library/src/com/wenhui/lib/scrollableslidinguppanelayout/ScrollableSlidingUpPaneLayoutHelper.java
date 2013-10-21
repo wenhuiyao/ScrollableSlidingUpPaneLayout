@@ -7,7 +7,7 @@ import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 
-import com.wenhui.lib.scrollableslidinguppanelayout.ScrollableSlidingUpPanelLayout.PanelExpandedListener;
+import com.wenhui.lib.scrollableslidinguppanelayout.ScrollableSlidingUpPaneLayout.PanelExpandedListener;
 
 public class ScrollableSlidingUpPaneLayoutHelper implements View.OnTouchListener {
 
@@ -15,7 +15,7 @@ public class ScrollableSlidingUpPaneLayoutHelper implements View.OnTouchListener
 	private int mInitialY = 0;
 	private ViewDelegate mViewDelegate;
 	private ViewGroup mTargetView;
-	private ScrollableSlidingUpPanelLayout mSlidingLayout;
+	private ScrollableSlidingUpPaneLayout mSlidingLayout;
 	
 	static ScrollableSlidingUpPaneLayoutHelper getInstance(Context context){
 		return new ScrollableSlidingUpPaneLayoutHelper(context);
@@ -25,7 +25,7 @@ public class ScrollableSlidingUpPaneLayoutHelper implements View.OnTouchListener
 		mTouchSlop = ViewConfiguration.get(context).getScaledTouchSlop();
 	}
 	
-	public void addScrollableView(ScrollableSlidingUpPanelLayout layout, ViewGroup view){
+	public void addScrollableView(ScrollableSlidingUpPaneLayout layout, ViewGroup view){
 		mTargetView = view;
 		mViewDelegate = InstanceCreationUtils.getBuiltInViewDelegate(mTargetView);
 		if (mViewDelegate == null) {
@@ -66,7 +66,7 @@ public class ScrollableSlidingUpPaneLayoutHelper implements View.OnTouchListener
 		return false;
 	}
 	
-	private ScrollableSlidingUpPanelLayout.PanelExpandedListener mPanelExpandedListener = new PanelExpandedListener() {
+	private ScrollableSlidingUpPaneLayout.PanelExpandedListener mPanelExpandedListener = new PanelExpandedListener() {
 		
 		@Override
 		public void onPanelExpanded() {
