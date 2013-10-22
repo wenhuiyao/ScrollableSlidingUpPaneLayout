@@ -1,6 +1,7 @@
 ScrollableSlidingUpPaneLayout
 =========
 
+(BETA version)
 An enhanced version of SlidingUpPaneLayout created by [Umano](https://github.com/umano/AndroidSlidingUpPanel).
 
 
