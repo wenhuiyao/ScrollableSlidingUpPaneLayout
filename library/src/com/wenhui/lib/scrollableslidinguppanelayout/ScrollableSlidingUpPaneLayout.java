@@ -21,7 +21,7 @@ import android.view.ViewGroup;
 import android.view.accessibility.AccessibilityEvent;
 
 public class ScrollableSlidingUpPaneLayout extends ViewGroup {
-	private static final String TAG = "SlidingPaneLayout";
+	private static final String TAG = "ScrollableSlidingPaneLayout";
 
 	/**
 	 * Default peeking out panel height
@@ -627,12 +627,14 @@ public class ScrollableSlidingUpPaneLayout extends ViewGroup {
 
 		if (!mCanSlide || !mIsSlidingEnabled
 				|| (mIsUnableToDrag && action != MotionEvent.ACTION_DOWN)) {
+			Log.d(TAG, "abort draging at begin");
 			mDragHelper.cancel();
 			return super.onInterceptTouchEvent(ev);
 		}
 
 		if (action == MotionEvent.ACTION_CANCEL
 				|| action == MotionEvent.ACTION_UP) {
+			Log.d(TAG, "abort draging at middle");
 			mDragHelper.cancel();
 			return false;
 		}
@@ -640,30 +642,57 @@ public class ScrollableSlidingUpPaneLayout extends ViewGroup {
 		final float x = ev.getX();
 		final float y = ev.getY();
 		boolean interceptTouch = !isFullyExpanded();
+		boolean interceptTap = false;
 		boolean touchMove = false;
 		
 		switch (action) {
 		case MotionEvent.ACTION_DOWN: {
+			Log.d(TAG, "Touch down: " + y);
 			mIsUnableToDrag = false;
 			mInitialMotionX = x;
 			mInitialMotionY = y;
+			
+			mDragViewHit = isDragViewHit((int)x, (int)y);
+			
+			if( mDragViewHit ){
+				Log.d(TAG, "Drag view hit");
+			}
 			break;
 		}
 
 		case MotionEvent.ACTION_MOVE: {
+			Log.d(TAG, "touch move");
 			touchMove = true;
 			final float adx = Math.abs(x - mInitialMotionX);
 			final float ady = Math.abs(y - mInitialMotionY);
 			final int slop = mDragHelper.getTouchSlop();
-			if (ady > slop && adx > ady * 0.5f ) {
+			if (ady > slop && adx > ady) {
+				Log.d(TAG, "abort draging");
 				mDragHelper.cancel();
 				mIsUnableToDrag = true;
-			}
+				touchMove = false;
+			} 
 			
 		}
 		}
+		
+		if( mDragViewHit ){
+			Log.d( TAG, "should intercept touch: " + mDragHelper.shouldInterceptTouchEvent(ev) );
+		}
+		
+		
+		interceptTap = mDragViewHit ;
+		boolean shouldInterceptTouch = false;
+		if( mDragViewHit ){
+			try{
+				shouldInterceptTouch = mDragHelper.shouldInterceptTouchEvent(ev);
+			}catch(IllegalArgumentException e){
+				shouldInterceptTouch = false;
+			}
+		}
+		interceptTouch = interceptTouch || shouldInterceptTouch;
 
-		return ( interceptTouch && touchMove ) || mDragHelper.shouldInterceptTouchEvent(ev);
+		return ( interceptTouch && touchMove ) && interceptTap;
 	}
 
 	@Override
@@ -672,7 +701,12 @@ public class ScrollableSlidingUpPaneLayout extends ViewGroup {
 			return super.onTouchEvent(ev);
 		}
 
-		mDragHelper.processTouchEvent(ev);
+		try{
+			// TODO: Fixme
+			mDragHelper.processTouchEvent(ev);
+		} catch( IllegalArgumentException e ){
+			return super.onTouchEvent(ev);
+		}
 
 		final int action = ev.getAction();
 		boolean wantTouchEvents = true;

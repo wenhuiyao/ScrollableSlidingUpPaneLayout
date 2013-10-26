@@ -95,7 +95,9 @@ public class ScrollableSlidingUpPaneLayoutHelper implements View.OnTouchListener
 		
 		@Override
 		public void onPanelExpanded() {
+			mTargetView.requestDisallowInterceptTouchEvent(false);
 			mSlidingLayout.setSlidingEnabled(false);
+			mSlidingLayout.requestDisallowInterceptTouchEvent(true);
 		}
 		
 		@Override
