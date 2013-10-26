@@ -13,6 +13,7 @@ import android.support.v4.content.Loader;
 import android.support.v4.widget.CursorAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.view.ViewTreeObserver;
@@ -34,8 +35,8 @@ public class ImageFragment extends Fragment implements LoaderCallbacks<Cursor>,
 	private int mImageThumbSpacing;
 	private Uri mContentUri;
 	private ImageView mFullSizeImage;
+	private GridView mGridView;
 	
-
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -54,23 +55,23 @@ public class ImageFragment extends Fragment implements LoaderCallbacks<Cursor>,
 		mLayout = (ScrollableSlidingUpPaneLayout) inflater
 				.inflate(R.layout.activity_main, container, false);
 
-		final GridView gridView = (GridView) mLayout.findViewById(R.id.gridView);
-		mLayout.enableOverscroll(gridView);
+		mGridView = (GridView) mLayout.findViewById(R.id.gridView);
+		mLayout.enableOverscroll(mGridView);
 		// Don't show dim color
 		mLayout.setCoveredFadeColor(0);
 		
 		mFullSizeImage = (ImageView) mLayout.findViewById(R.id.fullSizeImage);
 		
-		gridView.getViewTreeObserver().addOnGlobalLayoutListener(
+		mGridView.getViewTreeObserver().addOnGlobalLayoutListener(
 				new ViewTreeObserver.OnGlobalLayoutListener() {
 					@Override
 					public void onGlobalLayout() {
 						if (mAdapter.getNumColumns() == 0) {
-							final int numColumns = (int) Math.floor(gridView
+							final int numColumns = (int) Math.floor(mGridView
 									.getWidth()
 									/ (mImageThumbnailSize + mImageThumbSpacing));
 							if (numColumns > 0) {
-								final int columnWidth = (gridView.getWidth() / numColumns)
+								final int columnWidth = (mGridView.getWidth() / numColumns)
 										- mImageThumbSpacing;
 								mAdapter.setNumColumns(numColumns);
 								mAdapter.setItemHeight(columnWidth);
@@ -78,8 +79,8 @@ public class ImageFragment extends Fragment implements LoaderCallbacks<Cursor>,
 						}
 					}
 				});
-		gridView.setOnItemClickListener(this);
-		gridView.setAdapter(mAdapter);
+		mGridView.setOnItemClickListener(this);
+		mGridView.setAdapter(mAdapter);
 		return mLayout;
 	}
 
@@ -149,7 +150,7 @@ public class ImageFragment extends Fragment implements LoaderCallbacks<Cursor>,
 				.getColumnIndex(MediaStore.Images.Media._ID));
 		Uri uri = Uri.withAppendedPath(mContentUri, Integer.toString(imageID));
 
-		Picasso.with(getActivity()).load(uri).into(mFullSizeImage);
+		Picasso.with(getActivity()).load(uri).resize(400, 400).centerInside().into(mFullSizeImage);
 	}
 
 	private class ImageAdapter extends CursorAdapter {
@@ -177,6 +178,9 @@ public class ImageFragment extends Fragment implements LoaderCallbacks<Cursor>,
 			Uri uri = Uri.withAppendedPath(mContentUri,
 					Integer.toString(imageID));
 
+			iv.setTag(R.id.position, cursor.getPosition());
+//			iv.setOnClickListener(mClickListener);
+			
 			Picasso.with(mContext).load(uri)
 					.placeholder(R.drawable.empty_photo)
 					.resize(mItemHeight, mItemHeight).centerCrop().into(iv);
@@ -215,10 +219,27 @@ public class ImageFragment extends Fragment implements LoaderCallbacks<Cursor>,
 		}
 
 	}
+	
+	private OnClickListener mClickListener = new View.OnClickListener() {
+		
+		@Override
+		public void onClick(View v) {
+			int position = (Integer)v.getTag(R.id.position);
+			Cursor c = (Cursor)mAdapter.getItem(position);
+			
+			if( c != null ){
+				loadImage(c);
+				mGridView.smoothScrollToPosition(0);
+				mLayout.collapsePane();
+				
+			}
+			
+		}
+	};
 
 	@Override
 	public boolean onBackPressedCallback() {
-		if( mLayout.isExpanded() ){
+		if( mLayout.isFullyExpanded() || mLayout.isExpandedHalfway() ){
 			mLayout.collapsePane();
 			return true;
 		} else {

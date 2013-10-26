@@ -24,6 +24,7 @@ import java.util.Set;
 import android.content.Context;
 import android.util.Log;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.ScrollView;
 
 import com.wenhui.lib.scrollableslidinguppanelayout.viewDelegate.AbsListViewDelegate;
@@ -42,17 +43,26 @@ class InstanceCreationUtils {
     }
 
     static ScrollableSlidingUpPaneLayoutHelper.ViewDelegate getBuiltInViewDelegate(final View view) {
-        final Set<Map.Entry<Class, Class>> entries = BUILT_IN_DELEGATES.entrySet();
-        for (final Map.Entry<Class, Class> entry : entries) {
-            if (entry.getKey().isInstance(view)) {
-                return InstanceCreationUtils.newInstance(view.getContext(),
-                        entry.getValue(), VIEW_DELEGATE_CONSTRUCTOR_SIGNATURE, null);
-            }
-        }
+    	
+    	Log.d("ScrollView", view.getClass().getSimpleName() );
+    	if( view instanceof SlideableScrollView ){
+    		return (SlideableScrollView)view;
+    	}
+    	
+    	if( view instanceof AbsListView ){
+    		return new AbsListViewDelegate();
+    	}
+    	
+//        final Set<Map.Entry<Class, Class>> entries = BUILT_IN_DELEGATES.entrySet();
+//        for (final Map.Entry<Class, Class> entry : entries) {
+//            if (entry.getKey().isInstance(view)) {
+//                return InstanceCreationUtils.newInstance(view.getContext(),
+//                        entry.getValue(), VIEW_DELEGATE_CONSTRUCTOR_SIGNATURE, null);
+//            }
+//        }
 
         // Default is the ScrollYDelegate
-        return InstanceCreationUtils.newInstance(view.getContext(),
-                ScrollYDelegate.class, VIEW_DELEGATE_CONSTRUCTOR_SIGNATURE, null);
+        return new ScrollYDelegate();
     }
 
     private static <T> T newInstance(Context context, Class clazz, Class[] constructorSig,

@@ -25,7 +25,7 @@ import com.wenhui.lib.scrollableslidinguppanelayout.ScrollableSlidingUpPaneLayou
  * FIXME
  */
 public class AbsListViewDelegate
-        extends ScrollableSlidingUpPaneLayoutHelper.ViewDelegate {
+        implements ScrollableSlidingUpPaneLayoutHelper.ViewDelegate {
 
     public static final Class SUPPORTED_VIEW_CLASS = AbsListView.class;
 

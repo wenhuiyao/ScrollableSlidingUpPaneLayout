@@ -59,6 +59,9 @@ An enhanced version of SlidingUpPaneLayout created by [Umano](https://github.com
     	</LinearLayout>
 
 	</com.wenhui.lib.scrollableslidinguppanelayout.ScrollableSlidingUpPanelLayout>
+	
+
+** For ScrollView, please use com.wenhui.lib.scrollableslidinguppanelayout.SlideableScrollView instead.
 
 License
 --------

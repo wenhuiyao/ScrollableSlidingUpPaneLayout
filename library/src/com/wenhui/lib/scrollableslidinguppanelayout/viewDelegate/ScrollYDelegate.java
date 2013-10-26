@@ -16,16 +16,15 @@
 
 package com.wenhui.lib.scrollableslidinguppanelayout.viewDelegate;
 
+import android.util.Log;
 import android.view.View;
-import android.widget.AbsListView;
-import android.widget.ScrollView;
 
 import com.wenhui.lib.scrollableslidinguppanelayout.ScrollableSlidingUpPaneLayoutHelper;
 
 /**
  * FIXME
  */
-public class ScrollYDelegate extends ScrollableSlidingUpPaneLayoutHelper.ViewDelegate {
+public class ScrollYDelegate implements ScrollableSlidingUpPaneLayoutHelper.ViewDelegate {
 
 	
     @Override

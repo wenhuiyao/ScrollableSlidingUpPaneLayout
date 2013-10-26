@@ -161,6 +161,9 @@ public class ScrollableSlidingUpPaneLayout extends ViewGroup {
 		 *            revealing other panes
 		 */
 		public void onPanelCollapsed(View panel);
+		
+		
+		public void onPanelHalfExpanded(View panel);
 
 		/**
 		 * Called when a sliding pane becomes slid completely expanded. The pane
@@ -188,6 +191,11 @@ public class ScrollableSlidingUpPaneLayout extends ViewGroup {
 		}
 
 		@Override
+		public void onPanelHalfExpanded(View panel){
+			
+		}
+		
+		@Override
 		public void onPanelExpanded(View panel) {
 		}
 	}
@@ -199,6 +207,7 @@ public class ScrollableSlidingUpPaneLayout extends ViewGroup {
 	 */
 	static interface PanelExpandedListener {
 		public void onPanelExpanded();
+		public void onPanelHalfExpanded();
 		public void onPanelCollapse();
 	}
 
@@ -336,6 +345,17 @@ public class ScrollableSlidingUpPaneLayout extends ViewGroup {
 		}
 		sendAccessibilityEvent(AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED);
 	}
+	
+	void dispatchOnPanelExpandedHalfWay( View panel ){
+		if (mPanelSlideListener != null) {
+			mPanelSlideListener.onPanelHalfExpanded(panel);
+		}
+		
+		if( mPanelExpandedListener != null ){
+			mPanelExpandedListener.onPanelHalfExpanded();
+		}
+		sendAccessibilityEvent(AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED);
+	}
 
 	void dispatchOnPanelCollapsed(View panel) {
 		if (mPanelSlideListener != null) {
@@ -454,7 +474,8 @@ public class ScrollableSlidingUpPaneLayout extends ViewGroup {
 				continue;
 			}
 
-			if (lp.slideable) {
+			if (i==1) {
+				lp.slideable = true;
 				lp.dimWhenOffset = true;
 				mSlideableView = child;
 				mCanSlide = true;
@@ -618,37 +639,31 @@ public class ScrollableSlidingUpPaneLayout extends ViewGroup {
 
 		final float x = ev.getX();
 		final float y = ev.getY();
-		boolean interceptTap = false;
-
+		boolean interceptTouch = !isFullyExpanded();
+		boolean touchMove = false;
+		
 		switch (action) {
 		case MotionEvent.ACTION_DOWN: {
 			mIsUnableToDrag = false;
 			mInitialMotionX = x;
 			mInitialMotionY = y;
-			mDragViewHit = isDragViewHit((int) x, (int) y);
-
-			if (mDragViewHit) {
-				interceptTap = true;
-			}
 			break;
 		}
 
 		case MotionEvent.ACTION_MOVE: {
+			touchMove = true;
 			final float adx = Math.abs(x - mInitialMotionX);
 			final float ady = Math.abs(y - mInitialMotionY);
 			final int slop = mDragHelper.getTouchSlop();
-			if (ady > slop && adx > ady) {
+			if (ady > slop && adx > ady * 0.5f ) {
 				mDragHelper.cancel();
 				mIsUnableToDrag = true;
-				return false;
 			}
+			
 		}
 		}
 
-		final boolean interceptForDrag = mDragViewHit
-				&& mDragHelper.shouldInterceptTouchEvent(ev);
-
-		return interceptForDrag || interceptTap;
+		return ( interceptTouch && touchMove ) || mDragHelper.shouldInterceptTouchEvent(ev);
 	}
 
 	@Override
@@ -661,6 +676,7 @@ public class ScrollableSlidingUpPaneLayout extends ViewGroup {
 
 		final int action = ev.getAction();
 		boolean wantTouchEvents = true;
+		
 
 		switch (action & MotionEventCompat.ACTION_MASK) {
 		case MotionEvent.ACTION_DOWN: {
@@ -681,8 +697,8 @@ public class ScrollableSlidingUpPaneLayout extends ViewGroup {
 					&& isDragViewHit((int) x, (int) y)) {
 				View v = mDragView != null ? mDragView : mSlideableView;
 				v.playSoundEffect(SoundEffectConstants.CLICK);
-				if (!isExpanded()) {
-					expandPane(mSlideableView, 0);
+				if (!( isFullyExpanded() || isExpandedHalfway() ) ) {
+					expandPaneHalfWay(mSlideableView, 0);
 				} 
 				break;
 			}
@@ -693,9 +709,18 @@ public class ScrollableSlidingUpPaneLayout extends ViewGroup {
 		return wantTouchEvents;
 	}
 
-	private boolean expandPane(View pane, int initialVelocity) {
+	private boolean expandPaneHalfWay( View pane, int initialVelocity){
 		if (mFirstLayout
 				|| smoothSlideTo(mMiddleClampYOffset, initialVelocity)) {
+			mPreservedExpandedState = true;
+			return true;
+		}
+		return false;
+	}
+	
+	private boolean expandPane(View pane, int initialVelocity) {
+		if (mFirstLayout
+				|| smoothSlideTo(0f, initialVelocity)) {
 			mPreservedExpandedState = true;
 			return true;
 		}
@@ -750,9 +775,8 @@ public class ScrollableSlidingUpPaneLayout extends ViewGroup {
 	 * 
 	 * @return true if sliding panels are expanded
 	 */
-	public boolean isExpanded() {
-		return mFirstLayout && mPreservedExpandedState || !mFirstLayout
-				&& mCanSlide && mSlideOffset <= mMiddleClampYOffset;
+	public boolean isExpandedHalfway() {
+		return  mSlideOffset < mMiddleClampYOffset + 0.01f && mSlideOffset > mMiddleClampYOffset - 0.01f;
 	}
 	
 	/**
@@ -958,7 +982,7 @@ public class ScrollableSlidingUpPaneLayout extends ViewGroup {
 		Parcelable superState = super.onSaveInstanceState();
 
 		SavedState ss = new SavedState(superState);
-		ss.isExpanded = isSlideable() ? isExpanded() : mPreservedExpandedState;
+		ss.isExpanded = isSlideable() ? isFullyExpanded() : mPreservedExpandedState;
 
 		return ss;
 	}
@@ -994,7 +1018,12 @@ public class ScrollableSlidingUpPaneLayout extends ViewGroup {
 					updateObscuredViewVisibility();
 					dispatchOnPanelExpanded(mSlideableView);
 					mPreservedExpandedState = true;
-				} else {
+				} else if ( mSlideOffset == mMiddleClampYOffset ){
+					updateObscuredViewVisibility();
+					dispatchOnPanelExpandedHalfWay(mSlideableView);
+					mPreservedExpandedState = true;
+				}
+				else {
 					dispatchOnPanelCollapsed(mSlideableView);
 					mPreservedExpandedState = false;
 				}
