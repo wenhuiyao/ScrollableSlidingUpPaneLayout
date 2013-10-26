@@ -1,8 +1,8 @@
 ScrollableSlidingUpPaneLayout
 =========
 
-(BETA version)
-An enhanced version of SlidingUpPaneLayout created by [Umano](https://github.com/umano/AndroidSlidingUpPanel).
+(BETA version) A SlidingPaneLayout variant. Instead of sliding left and right, it slides up and down. And work with ListView, GridView, and ScrollView**.
+
 
 
 #### Main Features
@@ -62,6 +62,10 @@ An enhanced version of SlidingUpPaneLayout created by [Umano](https://github.com
 	
 
 ** For ScrollView, please use com.wenhui.lib.scrollableslidinguppanelayout.SlideableScrollView instead.
+
+#### Credit
+
+SlidingUpPaneLayout by [Umano](https://github.com/umano/AndroidSlidingUpPanel).
 
 License
 --------
