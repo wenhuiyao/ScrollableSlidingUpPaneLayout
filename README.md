@@ -52,7 +52,6 @@ ScrollableSlidingUpPaneLayout
     	<LinearLayout
         	android:layout_width="match_parent"
         	android:layout_height="match_parent"
-        	scrollablePane:layout_slideable="true"
         	android:orientation="vertical" >
 
   			...
