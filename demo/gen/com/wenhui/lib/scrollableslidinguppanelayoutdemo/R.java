@@ -50,14 +50,6 @@ theme attribute (in the form
 containing a value of this type.
          */
         public static final int is_sliding_enable=0x7f010004;
-        /** <p>Must be a boolean value, either "<code>true</code>" or "<code>false</code>".
-<p>This may also be a reference to a resource (in the form
-"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
-theme attribute (in the form
-"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
-containing a value of this type.
-         */
-        public static final int layout_slideable=0x7f010008;
         /** <p>Must be a dimension value, which is a floating point number appended with a unit such as "<code>14.5sp</code>".
 Available units are: px (pixels), dp (density-independent pixels), sp (scaled pixels based on preferred font size),
 in (inches), mm (millimeters).
@@ -334,32 +326,5 @@ containing a value of this type.
           @attr name com.wenhui.lib.scrollableslidinguppanelayoutdemo:shadow_height
         */
         public static final int ScrollableSlidingUpPaneLayout_shadow_height = 3;
-        /** Attributes that can be used with a ScrollableSlidingUpPaneLayout_LayoutParams.
-           <p>Includes the following attributes:</p>
-           <table>
-           <colgroup align="left" />
-           <colgroup align="left" />
-           <tr><th>Attribute</th><th>Description</th></tr>
-           <tr><td><code>{@link #ScrollableSlidingUpPaneLayout_LayoutParams_layout_slideable com.wenhui.lib.scrollableslidinguppanelayoutdemo:layout_slideable}</code></td><td></td></tr>
-           </table>
-           @see #ScrollableSlidingUpPaneLayout_LayoutParams_layout_slideable
-         */
-        public static final int[] ScrollableSlidingUpPaneLayout_LayoutParams = {
-            0x7f010008
-        };
-        /**
-          <p>This symbol is the offset where the {@link com.wenhui.lib.scrollableslidinguppanelayoutdemo.R.attr#layout_slideable}
-          attribute's value can be found in the {@link #ScrollableSlidingUpPaneLayout_LayoutParams} array.
-
-
-          <p>Must be a boolean value, either "<code>true</code>" or "<code>false</code>".
-<p>This may also be a reference to a resource (in the form
-"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
-theme attribute (in the form
-"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
-containing a value of this type.
-          @attr name com.wenhui.lib.scrollableslidinguppanelayoutdemo:layout_slideable
-        */
-        public static final int ScrollableSlidingUpPaneLayout_LayoutParams_layout_slideable = 0;
     };
 }

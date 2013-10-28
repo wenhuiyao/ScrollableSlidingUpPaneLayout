@@ -13,7 +13,6 @@ public final class R {
 		public static final int expand_initially = 0x7f010000;
 		public static final int fade_color = 0x7f010006;
 		public static final int is_sliding_enable = 0x7f010004;
-		public static final int layout_slideable = 0x7f010008;
 		public static final int middle_clamp_bound = 0x7f010001;
 		public static final int panel_height = 0x7f010002;
 		public static final int shadow_height = 0x7f010003;
@@ -41,8 +40,6 @@ public final class R {
 	}
 	public static final class styleable {
 		public static final int[] ScrollableSlidingUpPaneLayout = { 0x7f010000, 0x7f010001, 0x7f010002, 0x7f010003, 0x7f010004, 0x7f010005, 0x7f010006, 0x7f010007 };
-		public static final int[] ScrollableSlidingUpPaneLayout_LayoutParams = { 0x7f010008 };
-		public static final int ScrollableSlidingUpPaneLayout_LayoutParams_layout_slideable = 0;
 		public static final int ScrollableSlidingUpPaneLayout_can_slide = 5;
 		public static final int ScrollableSlidingUpPaneLayout_draw_view_under_panel = 7;
 		public static final int ScrollableSlidingUpPaneLayout_expand_initially = 0;

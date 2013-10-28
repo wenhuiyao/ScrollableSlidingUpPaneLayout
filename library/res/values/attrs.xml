@@ -12,8 +12,4 @@
         <attr name="draw_view_under_panel" format="boolean"/>
     </declare-styleable>
     
-    <declare-styleable name="ScrollableSlidingUpPaneLayout_LayoutParams">
-        <attr name="layout_slideable" format="boolean"/>
-    </declare-styleable>
-    
 </resources>

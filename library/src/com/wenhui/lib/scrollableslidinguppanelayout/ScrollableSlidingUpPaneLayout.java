@@ -23,6 +23,7 @@ import android.view.accessibility.AccessibilityEvent;
 public class ScrollableSlidingUpPaneLayout extends ViewGroup {
 	private static final String TAG = "ScrollableSlidingPaneLayout";
 
+	
 	/**
 	 * Default peeking out panel height
 	 */
@@ -100,6 +101,7 @@ public class ScrollableSlidingUpPaneLayout extends ViewGroup {
 	 * is preventing a drag.
 	 */
 	private boolean mIsUnableToDrag;
+	
 
 	/**
 	 * Flag indicating that sliding feature is enabled\disabled
@@ -644,7 +646,7 @@ public class ScrollableSlidingUpPaneLayout extends ViewGroup {
 		boolean interceptTouch = !isFullyExpanded();
 		boolean interceptTap = false;
 		boolean touchMove = false;
-		
+		boolean shouldInterceptTouch = mDragHelper.shouldInterceptTouchEvent(ev);
 		switch (action) {
 		case MotionEvent.ACTION_DOWN: {
 			Log.d(TAG, "Touch down: " + y);
@@ -671,8 +673,7 @@ public class ScrollableSlidingUpPaneLayout extends ViewGroup {
 				mDragHelper.cancel();
 				mIsUnableToDrag = true;
 				touchMove = false;
-			} 
-			
+			}
 		}
 		}
 		
@@ -680,19 +681,10 @@ public class ScrollableSlidingUpPaneLayout extends ViewGroup {
 			Log.d( TAG, "should intercept touch: " + mDragHelper.shouldInterceptTouchEvent(ev) );
 		}
 		
-		
 		interceptTap = mDragViewHit ;
-		boolean shouldInterceptTouch = false;
-		if( mDragViewHit ){
-			try{
-				shouldInterceptTouch = mDragHelper.shouldInterceptTouchEvent(ev);
-			}catch(IllegalArgumentException e){
-				shouldInterceptTouch = false;
-			}
-		}
 		interceptTouch = interceptTouch || shouldInterceptTouch;
 
-		return ( interceptTouch && touchMove ) && interceptTap;
+		return interceptTouch && touchMove  && interceptTap;
 	}
 
 	@Override
@@ -711,7 +703,6 @@ public class ScrollableSlidingUpPaneLayout extends ViewGroup {
 		final int action = ev.getAction();
 		boolean wantTouchEvents = true;
 		
-
 		switch (action & MotionEventCompat.ACTION_MASK) {
 		case MotionEvent.ACTION_DOWN: {
 			final float x = ev.getX();
@@ -738,6 +729,14 @@ public class ScrollableSlidingUpPaneLayout extends ViewGroup {
 			}
 			break;
 		}
+		case MotionEvent.ACTION_MOVE: {
+			final int slop = mDragHelper.getTouchSlop();
+			if( slop > -1 && slop < 1 ){
+				// Single tap, don't consume the touch event
+				return false;
+			}
+		}
+			
 		}
 
 		return wantTouchEvents;
@@ -1171,13 +1170,6 @@ public class ScrollableSlidingUpPaneLayout extends ViewGroup {
 
 		public LayoutParams(Context c, AttributeSet attrs) {
 			super(c, attrs);
-
-			final TypedArray a = c.obtainStyledAttributes(attrs, R.styleable.ScrollableSlidingUpPaneLayout_LayoutParams);
-			try{
-				slideable = a.getBoolean(R.styleable.ScrollableSlidingUpPaneLayout_LayoutParams_layout_slideable, false);
-			} finally {
-				a.recycle();
-			}
 		}
 
 	}
