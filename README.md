@@ -1,7 +1,7 @@
 ScrollableSlidingUpPaneLayout
 =========
 
-(BETA version) A SlidingPaneLayout variant. Instead of sliding left and right, it slides up and down. And work with ListView, GridView, and ScrollView**.
+A SlidingPaneLayout variant. Instead of sliding left and right, it slides up and down. And work with ListView, GridView, and ScrollView**.
 
 
 
