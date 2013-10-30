@@ -17,6 +17,7 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SoundEffectConstants;
 import android.view.View;
+import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.view.accessibility.AccessibilityEvent;
 
@@ -43,6 +44,11 @@ public class ScrollableSlidingUpPaneLayout extends ViewGroup {
 	 * Minimum velocity that will be detected as a fling
 	 */
 	private static final int MIN_FLING_VELOCITY = 400; // dips per second
+	
+	/**
+	 * Minimum slop before dragging is start taking place
+	 */
+	private static final float MIN_DRAG_SLOP = 1F;
 
 	/**
 	 * The fade color used for the panel covered by the slider. 0 = no fading.
@@ -101,6 +107,8 @@ public class ScrollableSlidingUpPaneLayout extends ViewGroup {
 	 * is preventing a drag.
 	 */
 	private boolean mIsUnableToDrag;
+	
+	private float mMinDragSlop;
 	
 
 	/**
@@ -245,6 +253,8 @@ public class ScrollableSlidingUpPaneLayout extends ViewGroup {
 		final float density = context.getResources().getDisplayMetrics().density;
 		mDragHelper = ViewDragHelper.create(this, 0.5f, new DragHelperCallback());
 		mDragHelper.setMinVelocity(MIN_FLING_VELOCITY * density);
+		
+		mMinDragSlop = MIN_DRAG_SLOP * density;
 	}
 
 	/**
@@ -629,15 +639,14 @@ public class ScrollableSlidingUpPaneLayout extends ViewGroup {
 
 		if (!mCanSlide || !mIsSlidingEnabled
 				|| (mIsUnableToDrag && action != MotionEvent.ACTION_DOWN)) {
-			Log.d(TAG, "abort draging at begin");
 			mDragHelper.cancel();
 			return super.onInterceptTouchEvent(ev);
 		}
 
 		if (action == MotionEvent.ACTION_CANCEL
 				|| action == MotionEvent.ACTION_UP) {
-			Log.d(TAG, "abort draging at middle");
 			mDragHelper.cancel();
+			mDragViewHit = false;
 			return false;
 		}
 
@@ -645,8 +654,7 @@ public class ScrollableSlidingUpPaneLayout extends ViewGroup {
 		final float y = ev.getY();
 		boolean interceptTouch = !isFullyExpanded();
 		boolean interceptTap = false;
-		boolean touchMove = false;
-		boolean shouldInterceptTouch = mDragHelper.shouldInterceptTouchEvent(ev);
+		boolean startDragging = false;
 		switch (action) {
 		case MotionEvent.ACTION_DOWN: {
 			Log.d(TAG, "Touch down: " + y);
@@ -655,36 +663,48 @@ public class ScrollableSlidingUpPaneLayout extends ViewGroup {
 			mInitialMotionY = y;
 			
 			mDragViewHit = isDragViewHit((int)x, (int)y);
-			
-			if( mDragViewHit ){
-				Log.d(TAG, "Drag view hit");
-			}
 			break;
 		}
 
 		case MotionEvent.ACTION_MOVE: {
-			Log.d(TAG, "touch move");
-			touchMove = true;
 			final float adx = Math.abs(x - mInitialMotionX);
 			final float ady = Math.abs(y - mInitialMotionY);
 			final int slop = mDragHelper.getTouchSlop();
-			if (ady > slop && adx > ady) {
-				Log.d(TAG, "abort draging");
+			
+			if( ady > mMinDragSlop ){
+				startDragging = true;
+			}
+			
+			if( ady > slop && adx > ady ){
 				mDragHelper.cancel();
 				mIsUnableToDrag = true;
-				touchMove = false;
+				startDragging = false;
 			}
+			
+			break;
 		}
+		case MotionEvent.ACTION_UP: {
+			final int slop = mDragHelper.getTouchSlop();
+			final float adx = Math.abs(x - mInitialMotionX);
+			final float ady = Math.abs(y - mInitialMotionY);
+			if( ady < slop && adx < slop ){
+				// Touch tap
+				startDragging = false;
+				mDragHelper.cancel();
+				mIsUnableToDrag = true;
+				mDragViewHit = false;
+			}
+			break;
 		}
-		
-		if( mDragViewHit ){
-			Log.d( TAG, "should intercept touch: " + mDragHelper.shouldInterceptTouchEvent(ev) );
 		}
 		
 		interceptTap = mDragViewHit ;
+		
+		boolean shouldInterceptTouch = mDragViewHit && mDragHelper.shouldInterceptTouchEvent(ev);
+		
 		interceptTouch = interceptTouch || shouldInterceptTouch;
 
-		return interceptTouch && touchMove  && interceptTap;
+		return interceptTouch && startDragging  && interceptTap;
 	}
 
 	@Override
@@ -729,14 +749,6 @@ public class ScrollableSlidingUpPaneLayout extends ViewGroup {
 			}
 			break;
 		}
-		case MotionEvent.ACTION_MOVE: {
-			final int slop = mDragHelper.getTouchSlop();
-			if( slop > -1 && slop < 1 ){
-				// Single tap, don't consume the touch event
-				return false;
-			}
-		}
-			
 		}
 
 		return wantTouchEvents;
