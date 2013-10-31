@@ -108,7 +108,7 @@ public class ScrollableSlidingUpPaneLayout extends ViewGroup {
 	 */
 	private boolean mIsUnableToDrag;
 	
-	private float mMinDragSlop;
+	private int mTouchSlop;
 	
 
 	/**
@@ -139,11 +139,9 @@ public class ScrollableSlidingUpPaneLayout extends ViewGroup {
 	private final Rect mTmpRect = new Rect();
 	
 	/**
-	 * How far the slidable view can ben drag
+	 * How far the slideable view can be dragged
 	 */
 	private int mMiddleClampBound;
-
-	
 	private float mMiddleClampYOffset = 0f;
 
 	/**
@@ -254,7 +252,7 @@ public class ScrollableSlidingUpPaneLayout extends ViewGroup {
 		mDragHelper = ViewDragHelper.create(this, 0.5f, new DragHelperCallback());
 		mDragHelper.setMinVelocity(MIN_FLING_VELOCITY * density);
 		
-		mMinDragSlop = MIN_DRAG_SLOP * density;
+		mTouchSlop = ViewConfiguration.get(context).getScaledTouchSlop();
 	}
 
 	/**
@@ -465,8 +463,8 @@ public class ScrollableSlidingUpPaneLayout extends ViewGroup {
 		final int childCount = getChildCount();
 
 		if (childCount > 2) {
-			Log.e(TAG,
-					"onMeasure: More than two child views are not supported.");
+			throw new IllegalStateException(
+					"More than two child views are not supported");
 		} else if (getChildAt(1).getVisibility() == GONE) {
 			panelHeight = 0;
 		}
@@ -642,14 +640,12 @@ public class ScrollableSlidingUpPaneLayout extends ViewGroup {
 			mDragHelper.cancel();
 			return super.onInterceptTouchEvent(ev);
 		}
-
-		if (action == MotionEvent.ACTION_CANCEL
-				|| action == MotionEvent.ACTION_UP) {
+		
+		if( action == MotionEvent.ACTION_CANCEL || action == MotionEvent.ACTION_UP ){
 			mDragHelper.cancel();
-			mDragViewHit = false;
 			return false;
 		}
-
+		
 		final float x = ev.getX();
 		final float y = ev.getY();
 		boolean interceptTouch = !isFullyExpanded();
@@ -669,13 +665,11 @@ public class ScrollableSlidingUpPaneLayout extends ViewGroup {
 		case MotionEvent.ACTION_MOVE: {
 			final float adx = Math.abs(x - mInitialMotionX);
 			final float ady = Math.abs(y - mInitialMotionY);
-			final int slop = mDragHelper.getTouchSlop();
-			
-			if( ady > mMinDragSlop ){
+			if( ady >= mTouchSlop ){
 				startDragging = true;
 			}
 			
-			if( ady > slop && adx > ady ){
+			if( ady > mTouchSlop && adx > ady ){
 				mDragHelper.cancel();
 				mIsUnableToDrag = true;
 				startDragging = false;
@@ -683,26 +677,12 @@ public class ScrollableSlidingUpPaneLayout extends ViewGroup {
 			
 			break;
 		}
-		case MotionEvent.ACTION_UP: {
-			final int slop = mDragHelper.getTouchSlop();
-			final float adx = Math.abs(x - mInitialMotionX);
-			final float ady = Math.abs(y - mInitialMotionY);
-			if( ady < slop && adx < slop ){
-				// Touch tap
-				startDragging = false;
-				mDragHelper.cancel();
-				mIsUnableToDrag = true;
-				mDragViewHit = false;
-			}
-			break;
 		}
-		}
+		
 		
 		interceptTap = mDragViewHit ;
 		
-		boolean shouldInterceptTouch = mDragViewHit && mDragHelper.shouldInterceptTouchEvent(ev);
-		
-		interceptTouch = interceptTouch || shouldInterceptTouch;
+		interceptTouch = interceptTouch | ( mDragViewHit && mDragHelper.shouldInterceptTouchEvent(ev) ) ;
 
 		return interceptTouch && startDragging  && interceptTap;
 	}
@@ -1092,7 +1072,6 @@ public class ScrollableSlidingUpPaneLayout extends ViewGroup {
 		@Override
 		public void onViewReleased(View releasedChild, float xvel, float yvel) {
 			int top = getTopBound();
-			
 			
 			// yvel > 0, panel sliding down, otherwise, it is sliding up;
 			if (yvel > 0) {

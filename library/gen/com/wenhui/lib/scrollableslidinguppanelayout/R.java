@@ -131,6 +131,7 @@ containing a value of this type.
  All customizations that are NOT specific to a particular API-level can go here. 
          */
         public static int AppTheme=0x7f050001;
+        public static int imageViewStyle=0x7f050002;
     }
     public static final class styleable {
         /** Attributes that can be used with a ScrollableSlidingUpPaneLayout.

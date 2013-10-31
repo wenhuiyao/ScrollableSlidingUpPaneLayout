@@ -127,7 +127,7 @@ containing a value of this type.
     public static final class style {
         /**  Activity them 
          */
-        public static final int ActivityTheme=0x7f060002;
+        public static final int ActivityTheme=0x7f060003;
         /** 
         Base application theme, dependent on API level. This theme is replaced
         by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
@@ -176,7 +176,8 @@ containing a value of this type.
  All customizations that are NOT specific to a particular API-level can go here. 
          */
         public static final int AppTheme=0x7f060001;
-        public static final int TranslucentDarkActionBar=0x7f060003;
+        public static final int TranslucentDarkActionBar=0x7f060004;
+        public static final int imageViewStyle=0x7f060002;
     }
     public static final class styleable {
         /** Attributes that can be used with a ScrollableSlidingUpPaneLayout.
