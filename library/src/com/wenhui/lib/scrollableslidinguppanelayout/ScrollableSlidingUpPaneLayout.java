@@ -46,11 +46,6 @@ public class ScrollableSlidingUpPaneLayout extends ViewGroup {
 	private static final int MIN_FLING_VELOCITY = 400; // dips per second
 	
 	/**
-	 * Minimum slop before dragging is start taking place
-	 */
-	private static final float MIN_DRAG_SLOP = 1F;
-
-	/**
 	 * The fade color used for the panel covered by the slider. 0 = no fading.
 	 */
 	private int mCoveredFadeColor = DEFAULT_FADE_COLOR;
@@ -122,7 +117,7 @@ public class ScrollableSlidingUpPaneLayout extends ViewGroup {
 
 	private PanelSlideListener mPanelSlideListener;
 	
-	private PanelExpandedListener mPanelExpandedListener;
+	private PanelSlideListenerInternal mPanelExpandedListener;
 
 	private final ViewDragHelper mDragHelper;
 
@@ -213,10 +208,9 @@ public class ScrollableSlidingUpPaneLayout extends ViewGroup {
 	 * Listener for use internally to monitor expanded and collapse state
 	 *
 	 */
-	static interface PanelExpandedListener {
-		public void onPanelExpanded();
-		public void onPanelHalfExpanded();
-		public void onPanelCollapse();
+	static interface PanelSlideListenerInternal {
+		public void onPanelExpandedInternal();
+		public void onPanelCollapseInternal();
 	}
 
 	public ScrollableSlidingUpPaneLayout(Context context) {
@@ -295,7 +289,7 @@ public class ScrollableSlidingUpPaneLayout extends ViewGroup {
 		mPanelSlideListener = listener;
 	}
 	
-	void setPanelExpandedListener(PanelExpandedListener listener){
+	void setPanelExpandedListener(PanelSlideListenerInternal listener){
 		mPanelExpandedListener = listener;
 	}
 
@@ -351,7 +345,7 @@ public class ScrollableSlidingUpPaneLayout extends ViewGroup {
 		}
 		
 		if( mPanelExpandedListener != null ){
-			mPanelExpandedListener.onPanelExpanded();
+			mPanelExpandedListener.onPanelExpandedInternal();
 		}
 		sendAccessibilityEvent(AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED);
 	}
@@ -361,9 +355,6 @@ public class ScrollableSlidingUpPaneLayout extends ViewGroup {
 			mPanelSlideListener.onPanelHalfExpanded(panel);
 		}
 		
-		if( mPanelExpandedListener != null ){
-			mPanelExpandedListener.onPanelHalfExpanded();
-		}
 		sendAccessibilityEvent(AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED);
 	}
 
@@ -373,7 +364,7 @@ public class ScrollableSlidingUpPaneLayout extends ViewGroup {
 		}
 		
 		if( mPanelExpandedListener != null ){
-			mPanelExpandedListener.onPanelCollapse();
+			mPanelExpandedListener.onPanelCollapseInternal();
 		}
 		sendAccessibilityEvent(AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED);
 	}

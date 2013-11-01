@@ -40,9 +40,7 @@ public class MainActivity extends FragmentActivity {
 	
 	@Override
 	public void onBackPressed() {
-		if( mBackPressedListener != null && !mBackPressedListener.onBackPressedCallback() ){
-			super.onBackPressed();
-		}
+		super.onBackPressed();
 	}
 
 

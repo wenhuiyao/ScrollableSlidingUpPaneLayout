@@ -7,9 +7,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.ViewGroup;
-import android.widget.ScrollView;
 
-import com.wenhui.lib.scrollableslidinguppanelayout.ScrollableSlidingUpPaneLayout.PanelExpandedListener;
+import com.wenhui.lib.scrollableslidinguppanelayout.ScrollableSlidingUpPaneLayout.PanelSlideListenerInternal;
 
 public class ScrollableSlidingUpPaneLayoutHelper implements View.OnTouchListener {
 
@@ -18,6 +17,7 @@ public class ScrollableSlidingUpPaneLayoutHelper implements View.OnTouchListener
 	private ViewDelegate mViewDelegate;
 	private ViewGroup mTargetView;
 	private ScrollableSlidingUpPaneLayout mSlidingLayout;
+	private boolean mIsReadyToPullChecked = false;
 	
 	static ScrollableSlidingUpPaneLayoutHelper getInstance(Context context){
 		return new ScrollableSlidingUpPaneLayoutHelper(context);
@@ -45,26 +45,24 @@ public class ScrollableSlidingUpPaneLayoutHelper implements View.OnTouchListener
 	@Override
 	public boolean onTouch(View v, MotionEvent event) {
 		final int action = MotionEventCompat.getActionMasked(event);
-		Log.d("Helper", "Receive touch event action " + action + ", y position: " + event.getY());
 		
-		if( mTargetView instanceof SlideableScrollView ){
+		if( mTargetView instanceof SlideableScrollView && 
+				((SlideableScrollView) mTargetView).isReadyForPull(mTargetView, event.getX(), event.getY())
+				&& !mIsReadyToPullChecked ){
+			// ScrollView will skip Action_down event, this is to fix this problem
 			mInitialY = ( (SlideableScrollView)mTargetView ).mInitialY;
 		}
 		
 		switch (action) {
 		case MotionEvent.ACTION_DOWN:
-			Log.d("Helper", "action down");
 			if (mViewDelegate.isReadyForPull(v, event.getX(), event.getY())) {
-				Log.d("Helper", "Set y initial position");
 				mInitialY = (int) event.getY();
 			}
 
 			break;
 		case MotionEvent.ACTION_MOVE:
-			
 			if (mInitialY > 0) {
 				int yDiff = mInitialY - (int) event.getY();
-				Log.d("Helper", "Move position: " + yDiff);
 				
 				if ( yDiff < mTouchSlop ) {
 					enableSlidingPane();
@@ -83,6 +81,7 @@ public class ScrollableSlidingUpPaneLayoutHelper implements View.OnTouchListener
 	
 	private void resetTouch() {
 		mInitialY = -1;
+		mIsReadyToPullChecked = false;
 	}
 	
 	private void enableSlidingPane() {
@@ -91,25 +90,24 @@ public class ScrollableSlidingUpPaneLayoutHelper implements View.OnTouchListener
 		mSlidingLayout.requestDisallowInterceptTouchEvent(false);
 	}
 	
-	private ScrollableSlidingUpPaneLayout.PanelExpandedListener mPanelExpandedListener = new PanelExpandedListener() {
+	private void disableSlidingPane() {
+		mTargetView.requestDisallowInterceptTouchEvent(false);
+		mSlidingLayout.setSlidingEnabled(false);
+		mSlidingLayout.requestDisallowInterceptTouchEvent(true);
+	}
+	
+	private ScrollableSlidingUpPaneLayout.PanelSlideListenerInternal mPanelExpandedListener = new PanelSlideListenerInternal() {
 		
 		@Override
-		public void onPanelExpanded() {
-			mTargetView.requestDisallowInterceptTouchEvent(false);
-			mSlidingLayout.setSlidingEnabled(false);
-			mSlidingLayout.requestDisallowInterceptTouchEvent(true);
+		public void onPanelExpandedInternal() {
+			disableSlidingPane();
 		}
 		
 		@Override
-		public void onPanelCollapse() {
+		public void onPanelCollapseInternal() {
 			enableSlidingPane();
 		}
 
-		@Override
-		public void onPanelHalfExpanded() {
-//			mSlidingLayout.setSlidingEnabled(false);
-//			mSlidingLayout.requestDisallowInterceptTouchEvent(true);
-		}
 	};
 	
 	/**

@@ -16,7 +16,6 @@
 
 package com.wenhui.lib.scrollableslidinguppanelayout;
 
-import android.util.Log;
 import android.view.View;
 import android.widget.AbsListView;
 

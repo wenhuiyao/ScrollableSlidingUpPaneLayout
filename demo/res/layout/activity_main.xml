@@ -6,7 +6,7 @@
     scrollablePane:draw_view_under_panel="true"
     scrollablePane:expand_initially="false"
     scrollablePane:is_sliding_enable="true"
-    scrollablePane:middle_clamp_bound="220dp"
+    scrollablePane:middle_clamp_bound="200dp"
     scrollablePane:panel_height="@dimen/actionBarSize"
     tools:context=".MainActivity" >
 
