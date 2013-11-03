@@ -111,8 +111,8 @@ public class ScrollableSlidingUpPaneLayout extends ViewGroup {
 	 */
 	private boolean mIsSlidingEnabled;
 
-	private float mInitialMotionX;
-	private float mInitialMotionY;
+	private int mInitialMotionX;
+	private int mInitialMotionY;
 	private boolean mDragViewHit;
 
 	private PanelSlideListener mPanelSlideListener;
@@ -637,8 +637,8 @@ public class ScrollableSlidingUpPaneLayout extends ViewGroup {
 			return false;
 		}
 		
-		final float x = ev.getX();
-		final float y = ev.getY();
+		final int x = (int)ev.getX();
+		final int y = (int)ev.getY();
 		boolean interceptTouch = !isFullyExpanded();
 		boolean interceptTap = false;
 		boolean startDragging = false;
@@ -654,13 +654,26 @@ public class ScrollableSlidingUpPaneLayout extends ViewGroup {
 		}
 
 		case MotionEvent.ACTION_MOVE: {
-			final float ady = Math.abs(y - mInitialMotionY);
+			final int adx = Math.abs(x - mInitialMotionX);
+			final int ady = Math.abs(y - mInitialMotionY);
 			if( ady >= mTouchSlop ){
 				startDragging = true;
 			}
+			
+			View view = mDragHelper.findTopChildUnder(x, y);
+			boolean canScroll = canScroll(view, true, adx, x, y);
+			
+			if( canScroll && adx > 2 * ady ){
+				// Allow horizontal scroll
+				mDragHelper.cancel();
+				mIsUnableToDrag = true;
+				startDragging = false;
+			}
+			
 			break;
 		}
 		}
+		
 		
 		interceptTap = mDragViewHit ;
 		
@@ -684,21 +697,18 @@ public class ScrollableSlidingUpPaneLayout extends ViewGroup {
 
 		final int action = ev.getAction();
 		boolean wantTouchEvents = true;
+		final int x = (int)ev.getX();
+		final int y = (int)ev.getY();
 		
 		switch (action & MotionEventCompat.ACTION_MASK) {
 		case MotionEvent.ACTION_DOWN: {
-			final float x = ev.getX();
-			final float y = ev.getY();
 			mInitialMotionX = x;
 			mInitialMotionY = y;
 			break;
 		}
-
 		case MotionEvent.ACTION_UP: {
-			final float x = ev.getX();
-			final float y = ev.getY();
-			final float dx = x - mInitialMotionX;
-			final float dy = y - mInitialMotionY;
+			final int dx = x - mInitialMotionX;
+			final int dy = y - mInitialMotionY;
 			final int slop = mDragHelper.getTouchSlop();
 			if (dx * dx + dy * dy < slop * slop
 					&& isDragViewHit((int) x, (int) y)) {
