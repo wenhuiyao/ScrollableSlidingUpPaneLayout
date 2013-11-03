@@ -654,22 +654,13 @@ public class ScrollableSlidingUpPaneLayout extends ViewGroup {
 		}
 
 		case MotionEvent.ACTION_MOVE: {
-			final float adx = Math.abs(x - mInitialMotionX);
 			final float ady = Math.abs(y - mInitialMotionY);
 			if( ady >= mTouchSlop ){
 				startDragging = true;
 			}
-			
-			if( ady > mTouchSlop && adx > ady ){
-				mDragHelper.cancel();
-				mIsUnableToDrag = true;
-				startDragging = false;
-			}
-			
 			break;
 		}
 		}
-		
 		
 		interceptTap = mDragViewHit ;
 		
