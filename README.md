@@ -3,7 +3,9 @@ ScrollableSlidingUpPaneLayout
 
 A SlidingPaneLayout variant. Instead of sliding left and right, it slides up and down. And work with ListView, GridView, and ScrollView**.
 
+#### Demo app:
 
+* https://dl.dropboxusercontent.com/u/24027452/ScrollableSlidingUpPaneLayoutDemo.apk
 
 #### Main Features
 
