@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        jar="/Users/wyao/demoSrc/ScrollableSlidingUpPaneLayout/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/21.0.3/classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="81d42bf983a8741f4888a6e333e454e4a5e0eeb7">
+        <dex dex="/Users/wyao/demoSrc/ScrollableSlidingUpPaneLayout/app/build/intermediates/pre-dexed/debug/classes-1f2597ef728b04e657bd03b06062d230fdce19cd.jar" />
+    </item>
+    <item
+        jar="/Users/wyao/demoSrc/ScrollableSlidingUpPaneLayout/app/build/intermediates/exploded-aar/ScrollableSlidingUpPaneLayout/library/unspecified/classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="ff1d86cd9a17454ab6a5277c8f913533cf3aa75c">
+        <dex dex="/Users/wyao/demoSrc/ScrollableSlidingUpPaneLayout/app/build/intermediates/pre-dexed/debug/classes-23663ef9490c2e6a171fbbd4285784d82fa294b6.jar" />
+    </item>
+    <item
+        jar="/Users/wyao/Documents/Android_SDK/adt-bundle-mac-x86_64-20130917/sdk/extras/android/m2repository/com/android/support/support-annotations/21.0.3/support-annotations-21.0.3.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="4b74cefe1f0c1b819e7260c8627a14674e37fd35">
+        <dex dex="/Users/wyao/demoSrc/ScrollableSlidingUpPaneLayout/app/build/intermediates/pre-dexed/debug/support-annotations-21.0.3-0ec222cfb2d4a93577e5ad02926e49ce6f97e2ab.jar" />
+    </item>
+    <item
+        jar="/Users/wyao/demoSrc/ScrollableSlidingUpPaneLayout/app/build/intermediates/exploded-aar/com.android.support/support-v4/21.0.3/classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="2c91c949a45a21cdecf26e03951e46c7beec9ad8">
+        <dex dex="/Users/wyao/demoSrc/ScrollableSlidingUpPaneLayout/app/build/intermediates/pre-dexed/debug/classes-3fa224d7e540be345174a1f2864d874173814556.jar" />
+    </item>
+    <item
+        jar="/Users/wyao/demoSrc/ScrollableSlidingUpPaneLayout/app/libs/picasso-2.5.0.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="7ff0e000d1e27e356567f56c92af3b8ab912636f">
+        <dex dex="/Users/wyao/demoSrc/ScrollableSlidingUpPaneLayout/app/build/intermediates/pre-dexed/debug/picasso-2.5.0-3c4925cb76e1a889ea78ab1d32d987d9ce343c3b.jar" />
+    </item>
+    <item
+        jar="/Users/wyao/demoSrc/ScrollableSlidingUpPaneLayout/app/build/intermediates/exploded-aar/com.android.support/support-v4/21.0.3/libs/internal_impl-21.0.3.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="01ec05bfbafcc07646ba813000bf2ef11742dd03">
+        <dex dex="/Users/wyao/demoSrc/ScrollableSlidingUpPaneLayout/app/build/intermediates/pre-dexed/debug/internal_impl-21.0.3-2f38290d70cc7bf5e3fb7be6b41f6fb9b3532e22.jar" />
+    </item>
+
+</items>
