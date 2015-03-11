@@ -4,3 +4,4 @@ library/bin/
 demo/bin/
 
 *.iml
+.idea/
