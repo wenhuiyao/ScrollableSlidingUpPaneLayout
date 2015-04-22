@@ -5,7 +5,7 @@ A SlidingPaneLayout variant. Instead of sliding left and right, it slides up and
 
 #### Demo app:
 
-* https://dl.dropboxusercontent.com/u/24027452/ScrollableSlidingUpPaneLayoutDemo.apk
+* https://www.dropbox.com/s/umt2j2e0ifl8xuf/ScrollableSlidingUpPaneLayoutDemo.apk?dl=0
 
 #### Main Features
 
